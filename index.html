@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgentAi – Free Trial</title>
+  <meta name="theme-color" content="#000000">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fonturi -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: url('/gradient-blue.png') center / cover no-repeat fixed;
+      color: #fff;
+    }
+    h1 {
+      font-family: "Playfair Display", ui-serif, Georgia, serif;
+      letter-spacing: -0.02em;
+    }
+  </style>
+</head>
+<body class="antialiased">
+  <main class="w-full px-6">
+    <section class="max-w-3xl mx-auto pt-28 pb-16 text-center">
+      <h1 class="text-5xl md:text-6xl font-semibold leading-[1.1] tracking-tight">
+        Începeți perioada de <br>
+        <span class="whitespace-nowrap">Free Trial de 7 zile</span>
+      </h1>
+
+      <p class="mt-6 text-[18px] text-white/70 max-w-2xl mx-auto">
+        Completați formularul de mai jos pentru a testa agentul nostru de email timp de 7 zile gratuit.
+      </p>
+
+      <!-- Formular unic, POST către API -->
+      <form id="trial-form" action="/api/trial" method="POST" class="mt-8 space-y-4 max-w-xl mx-auto">
+        <input
+          type="email"
+          name="email"
+          autocomplete="email"
+          placeholder="Adresă de email"
+          class="w-full rounded-2xl px-5 py-4 bg-white/5 border border-white/10
+                 text-white placeholder-white/70 focus:outline-none
+                 focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+          required
+        >
+        <input
+          type="text"
+          name="company"
+          autocomplete="organization"
+          placeholder="Numele companiei"
+          class="w-full rounded-2xl px-5 py-4 bg-white/5 border border-white/10
+                 text-white placeholder-white/70 focus:outline-none
+                 focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+          required
+        >
+        <button
+          type="submit"
+          class="w-full rounded-2xl py-4 text-lg font-semibold
+                 bg-gradient-to-r from-[#2563EB] via-[#1D4ED8] to-[#0EA5E9]
+                 hover:from-[#1E40AF] hover:via-[#1D4ED8] hover:to-[#0284C7]
+                 shadow-[0_8px_18px_rgba(0,0,0,.25)] transition"
+        >
+          Free Trial
+        </button>
+      </form>
+
+      <noscript>
+        <p class="mt-4 text-white/70">
+          JavaScript este dezactivat. Formularul va trimite direct și vei fi redirecționat către pagina de confirmare.
+        </p>
+      </noscript>
+    </section>
+  </main>
+
+  <!-- JS: încearcă fetch; dacă nu reușește, lasă submit nativ -->
+  <script>
+  (function () {
+    const form = document.getElementById('trial-form');
+    if (!form) return;
+    const btn = form.querySelector('button[type="submit"]');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email   = form.elements['email'].value.trim();
+      const company = form.elements['company'].value.trim();
+
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Se trimite...';
+
+      try {
+        const res = await fetch('/api/trial', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, company })
+        });
+        if (res.ok) {
+          location.href = '/thanks.html';
+        } else {
+          form.submit();
+        }
+      } catch (err) {
+        form.submit();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
