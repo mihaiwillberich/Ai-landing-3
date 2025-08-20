@@ -8,12 +8,22 @@
     body {
       margin: 0;
       font-family: Inter, system-ui, sans-serif;
-      background: url('/gradient-blue.png') center / cover no-repeat fixed;
+      /* Fallback + overlay light + imagine Durable */
+      background-color: #0b1220;
+      background-image:
+        radial-gradient(800px 400px at 70% -10%, rgba(255,255,255,.08), transparent 60%),
+        url('https://cdn.durable.co/covers/29Xg26ptJ3V3f2BGgeGZgXcPGivyQ0pzWmxQPmuSGZMobFwGLGbmH4Y2nySfbwI9.png');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+
       color: #fff;
       display: grid;
       place-items: center;
       min-height: 100vh;
       text-align: center;
+      padding: 0 1rem;
     }
     h1 {
       font-size: 1.8rem;
